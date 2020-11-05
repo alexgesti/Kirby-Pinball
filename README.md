@@ -1,2 +1,2 @@
-# Pókemon Pinball GB
+# Kirby Pinball GB
 Physics project.

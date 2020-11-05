@@ -1,2 +1,2 @@
-# Pókemon-Pinball-GB
+# Pókemon Pinball GB
 Physics project.

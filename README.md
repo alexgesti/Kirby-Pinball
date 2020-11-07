@@ -1,2 +1,2 @@
-# Kirby Pinball GB
+# Kirby Pinball
 Physics project.

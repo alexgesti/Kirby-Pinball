@@ -1,2 +1,4 @@
 D:\cosas de clase\FisicaII\Kirby_Pinball_Physics_II_Box2D\Debug\2D Physics - class 4.exe
 D:\cosas de clase\FisicaII\Kirby_Pinball_Physics_II_Box2D\Debug\2D Physics - class 4.pdb
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.exe
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.pdb

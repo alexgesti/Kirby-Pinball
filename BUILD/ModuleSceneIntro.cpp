@@ -25,12 +25,42 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	kirby = App->textures->Load("pinball/Kirby_64.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	circle = App->textures->Load("Assets/sprites/wheel.png"); 
+	box = App->textures->Load("Assets/sprites/crate.png");
+	kirby = App->textures->Load("Assets/sprites/Kirby_64.png");
+	flipperl = App->textures->Load("Assets/sprites/Flippersl.png");
+	flipperr = App->textures->Load("Assets/sprites/Flippersr.png");
+
+	bonus_fx = App->audio->LoadFx("Assets/wab/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+
+	{
+		int Flapperlc[16] = {
+			110, 41,
+			110, 50,
+			105, 55,
+			21, 45,
+			1, 35,
+			1, 11,
+			11, 1,
+			35, 1,
+		};
+		Flapperl.add(App->physics->CreateChain(((SCREEN_WIDTH / 2) - (70 / 2) - 60), (SCREEN_HEIGHT - (70 / 2) - 110), Flapperlc, 16));
+	}
+	{
+		int Flapperrc[16] = {
+			1, 41,
+			1, 50,
+			6, 55,
+			90, 45,
+			110, 35,
+			110, 11,
+			100, 1,
+			76, 1,
+		};
+		Flapperr.add(App->physics->CreateChain(((SCREEN_WIDTH / 2) + (70 / 2) + 60), (SCREEN_HEIGHT - (70 / 2) - 110), Flapperrc, 16));
+	}
 
 	return ret;
 }
@@ -65,25 +95,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int Kirby[25] = {
-			5, 0,
-			2, 2,
-			0, 5,
-			0, 9,
-			2, 12,
-			5, 14,
-			9, 14,
-			12, 12,
-			14, 9,
-			14, 5,
-			12, 2,
-			9, 0,
-		};
-
-		kirbys.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), Kirby, 12));
-	}
+		kirbys.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -129,6 +141,26 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(kirby, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	c = Flapperl.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	c = Flapperr.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

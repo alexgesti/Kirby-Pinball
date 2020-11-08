@@ -21,6 +21,8 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> kirbys;
+	p2List<PhysBody*> Flapperl;
+	p2List<PhysBody*> Flapperr;
 
 	PhysBody* sensor;
 	bool sensed;
@@ -28,6 +30,9 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* kirby;
+	SDL_Texture* flipperl;
+	SDL_Texture* flipperr;
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;

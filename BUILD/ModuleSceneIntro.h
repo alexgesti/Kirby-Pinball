@@ -21,8 +21,10 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> kirbys;
-	p2List<PhysBody*> Flapperl;
-	p2List<PhysBody*> Flapperr;
+	p2List<PhysBody*> flapperl;
+	p2List<PhysBody*> flapperr;
+	p2List<PhysBody*> holderl;
+	p2List<PhysBody*> holderr;
 
 	PhysBody* sensor;
 	bool sensed;

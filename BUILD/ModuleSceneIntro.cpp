@@ -46,7 +46,18 @@ bool ModuleSceneIntro::Start()
 			11, 1,
 			35, 1,
 		};
-		Flapperl.add(App->physics->CreateChain(((SCREEN_WIDTH / 2) - (70 / 2) - 60), (SCREEN_HEIGHT - (70 / 2) - 110), Flapperlc, 16));
+		flapperl.add(App->physics->CreateChain(0, 0, Flapperlc, 16));
+		holderl.add(App->physics->CreateRectangle(((SCREEN_WIDTH / 2) - 112 - (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 11, 11));
+	
+		b2RevoluteJointDef Left;
+		Left.bodyA = flapperl.getLast()->data->body;
+		Left.bodyB = holderl.getLast()->data->body;
+		Left.collideConnected = false;
+		Left.upperAngle = 25 * DEGTORAD;
+		Left.lowerAngle = -25 * DEGTORAD;
+		Left.enableLimit = true;
+		Left.localAnchorA.Set(PIXEL_TO_METERS(23), PIXEL_TO_METERS(23));
+		App->physics->Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Left);
 	}
 	{
 		int Flapperrc[16] = {
@@ -59,7 +70,18 @@ bool ModuleSceneIntro::Start()
 			100, 1,
 			76, 1,
 		};
-		Flapperr.add(App->physics->CreateChain(((SCREEN_WIDTH / 2) + (70 / 2) + 60), (SCREEN_HEIGHT - (70 / 2) - 110), Flapperrc, 16));
+		flapperr.add(App->physics->CreateChain( 0, 0, Flapperrc, 16));
+		holderr.add(App->physics->CreateRectangle(((SCREEN_WIDTH / 2) + 112 + (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 11, 11));
+	
+		b2RevoluteJointDef Right;
+		Right.bodyA = flapperr.getLast()->data->body;
+		Right.bodyB = holderr.getLast()->data->body;
+		Right.collideConnected = false;
+		Right.upperAngle = 25 * DEGTORAD;
+		Right.lowerAngle = -25 * DEGTORAD;
+		Right.enableLimit = true;
+		Right.localAnchorA.Set(PIXEL_TO_METERS(88), PIXEL_TO_METERS(23));
+		App->physics->Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Right);
 	}
 
 	return ret;
@@ -96,6 +118,12 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 		kirbys.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+		flapperl.getLast()->data->body->ApplyForce({ 0, -500 }, { 110, 41 }, true);
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+		flapperr.getLast()->data->body->ApplyForce({ 0, -500 }, { 1, 41 }, true);
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -144,7 +172,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = Flapperl.getFirst();
+	c = flapperl.getFirst();
 
 	while (c != NULL)
 	{
@@ -154,7 +182,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = Flapperr.getFirst();
+	c = flapperr.getFirst();
 
 	while (c != NULL)
 	{

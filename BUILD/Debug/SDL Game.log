@@ -1,5 +1,5 @@
 ﻿  ModuleSceneIntro.cpp
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(170,45): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(198,45): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
           with
           [
               TYPE=int
@@ -8,7 +8,7 @@ C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(170,45)
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(170,30): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(198,30): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
           with
           [
               TYPE=int
@@ -17,37 +17,37 @@ C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(170,30)
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(172,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(174,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(200,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(202,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(174,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(202,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(177,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(205,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(177,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(205,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(177,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(205,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(177,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(205,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(185,9): warning C4101: 'y': variable local sin referencia
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(185,6): warning C4101: 'x': variable local sin referencia
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(213,9): warning C4101: 'y': variable local sin referencia
+C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(213,6): warning C4101: 'x': variable local sin referencia
   SDL Game.vcxproj -> C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.exe

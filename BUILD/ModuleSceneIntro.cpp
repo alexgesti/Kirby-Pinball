@@ -160,6 +160,24 @@ bool ModuleSceneIntro::Start()
 
 	tubor.add(App->physics->CreateStaticChain(0, 0, Tuborc, 14));
 
+	int Trianlc[6]
+	{
+		191, 436,
+		231, 494,
+		191, 474,
+	};
+
+	trianl.add(App->physics->CreateStaticChain(0, 0, Trianlc, 6));
+
+	int Trianrc[6]
+	{
+		576, 436,
+		537, 494,
+		576, 474,
+	};
+
+	trianr.add(App->physics->CreateStaticChain(0, 0, Trianrc, 6));
+
 	return ret;
 }
 

@@ -29,6 +29,8 @@ public:
 	p2List<PhysBody*> holderr;
 	p2List<PhysBody*> tubol; 
 	p2List<PhysBody*> tubor;
+	p2List<PhysBody*> trianl;
+	p2List<PhysBody*> trianr;
 
 	PhysBody* sensor;
 	bool sensed;

@@ -37,7 +37,8 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	//Flapper left
-	int Flapperlc[16]{
+	int Flapperlc[16]
+	{
 		110, 41,
 		110, 50,
 		105, 55,
@@ -62,7 +63,8 @@ bool ModuleSceneIntro::Start()
 	Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Left);
 	
 	//Flapper Right
-	int Flapperrc[16]{
+	int Flapperrc[16]
+	{
 		1, 41,
 		1, 50,
 		6, 55,

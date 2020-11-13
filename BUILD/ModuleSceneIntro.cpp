@@ -25,6 +25,7 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	maptt = App->textures->Load("Assets/sprites/Fondo_Sprite.png");
 	circle = App->textures->Load("Assets/sprites/wheel.png"); 
 	box = App->textures->Load("Assets/sprites/crate.png");
 	kirby = App->textures->Load("Assets/sprites/Kirby_64_ball.png");
@@ -47,8 +48,8 @@ bool ModuleSceneIntro::Start()
 		35, 1,
 	};
 
-	flapperl.add(App->physics->CreateDynamicPolygon(0, 0, Flapperlc, 16));
-	holderl.add(App->physics->CreateStaticCircle(((SCREEN_WIDTH / 2) - 112 - (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 6));
+	flapperl.add(App->physics->CreateDynamicPolygon(257, 592, Flapperlc, 16));
+	holderl.add(App->physics->CreateStaticCircle(257, 592, 6));
 	
 	b2RevoluteJointDef Left;
 	Left.bodyA = flapperl.getLast()->data->body;
@@ -72,19 +73,90 @@ bool ModuleSceneIntro::Start()
 		76, 1,
 	};
 
-	flapperr.add(App->physics->CreateDynamicPolygon(0, 0, Flapperrc, 16));
-	holderr.add(App->physics->CreateStaticCircle(((SCREEN_WIDTH / 2) + 112 + (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 6));
+	flapperr.add(App->physics->CreateDynamicPolygon(350, 592, Flapperrc, 16));
+	holderr.add(App->physics->CreateStaticCircle(511, 592, 6));
 	
 	b2RevoluteJointDef Right;
 	Right.bodyA = flapperr.getLast()->data->body;
 	Right.bodyB = holderr.getLast()->data->body;
 	Right.collideConnected = false;
-	Right.referenceAngle = 310 * DEGTORAD;
+	Right.referenceAngle = -50 * DEGTORAD;
 	Right.upperAngle = 50 * DEGTORAD;
 	Right.lowerAngle = 0 * DEGTORAD;
 	Right.enableLimit = true;
 	Right.localAnchorA.Set(PIXEL_TO_METERS(88), PIXEL_TO_METERS(23));
 	Jright = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Right);
+
+	int Maptc[78]
+	{
+		298, 728,
+		298, 714,
+		77, 604,
+		68, 594,
+		58, 575,
+		58, 418,
+		68, 394,
+		82, 379,
+		106, 370,
+		106, 350,
+		77, 350,
+		53, 340,
+		44, 330,
+		34, 306,
+		34, 77,
+		44, 53,
+		53, 44,
+		77, 34,
+		691, 34,
+		715, 44,
+		724, 53,
+		734, 77,
+		734, 306,
+		724, 330,
+		715, 340,
+		691, 350,
+		662, 350,
+		662, 370,
+		686, 379,
+		700, 394,
+		710, 418,
+		710, 575,
+		700, 594,
+		470, 714,
+		470, 728,
+		767, 728,
+		767, 0,
+		0, 0,
+		0, 728,
+	};
+
+	mapt.add(App->physics->CreateStaticChain(0, 0, Maptc, 78));
+
+	int Tubolc[14]
+	{
+		124, 431,
+		130, 431,
+		130, 508,
+		144, 521,
+		231, 565,
+		225, 586,
+		124, 533,
+	};
+
+	tubol.add(App->physics->CreateStaticChain(0, 0, Tubolc, 14));
+
+	int Tuborc[14]
+	{
+		644, 431,
+		638, 431,
+		638, 508,
+		623, 522,
+		537, 565,
+		552, 581,
+		644, 533,
+	};
+
+	tubor.add(App->physics->CreateStaticChain(0, 0, Tuborc, 14));
 
 	return ret;
 }
@@ -119,17 +191,17 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 33));
+		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 28));
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		flapperl.getLast()->data->body->ApplyForce({ 0, 100 }, { 0, 0 }, true);
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
-		flapperl.getLast()->data->body->ApplyForce({ 0, -50 }, { 0, 0 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
+		flapperl.getLast()->data->body->ApplyForce({ 0, -15 }, { 0, 0 }, true);
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		flapperr.getLast()->data->body->ApplyForce({ 0, -100 }, { 6, 50 }, true);
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
-		flapperr.getLast()->data->body->ApplyForce({ 0, 50 }, { 6, 50 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE)
+		flapperr.getLast()->data->body->ApplyForce({ 0, 15 }, { 6, 50 }, true);
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -167,13 +239,23 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
+	c = mapt.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(maptt, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
 	c = kirbys.getFirst();
 
 	while(c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(kirby, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(kirby, x -5 , y-5, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

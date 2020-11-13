@@ -19,6 +19,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
+	p2List<PhysBody*> mapt;
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> kirbys;
@@ -26,6 +27,8 @@ public:
 	p2List<PhysBody*> flapperr;
 	p2List<PhysBody*> holderl;
 	p2List<PhysBody*> holderr;
+	p2List<PhysBody*> tubol; 
+	p2List<PhysBody*> tubor;
 
 	PhysBody* sensor;
 	bool sensed;
@@ -38,6 +41,7 @@ public:
 	SDL_Texture* kirby;
 	SDL_Texture* flipperl;
 	SDL_Texture* flipperr;
+	SDL_Texture* maptt;
 
 	uint bonus_fx;
 	p2Point<int> ray;

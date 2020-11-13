@@ -27,7 +27,7 @@ bool ModuleSceneIntro::Start()
 
 	circle = App->textures->Load("Assets/sprites/wheel.png"); 
 	box = App->textures->Load("Assets/sprites/crate.png");
-	kirby = App->textures->Load("Assets/sprites/Kirby_64.png");
+	kirby = App->textures->Load("Assets/sprites/Kirby_64_ball.png");
 	flipperl = App->textures->Load("Assets/sprites/Flippersl.png");
 	flipperr = App->textures->Load("Assets/sprites/Flippersr.png");
 
@@ -119,7 +119,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 33));
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		flapperl.getLast()->data->body->ApplyForce({ 0, 100 }, { 0, 0 }, true);
@@ -147,8 +147,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
@@ -184,7 +183,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
 		c = c->next;
 	}
 
@@ -194,7 +193,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
 		c = c->next;
 	}
 

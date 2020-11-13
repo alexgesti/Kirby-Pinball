@@ -42,16 +42,18 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateDynamicCircle(int x, int y, int radius);
+	PhysBody* CreateStaticCircle(int x, int y, int radius);
+	PhysBody* CreateDynamicRectangle(int x, int y, int width, int height);
+	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateDynamicChain(int x, int y, int* points, int size);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
+	PhysBody* CreateDynamicPolygon(int x, int y, int* points, int size);
+	PhysBody* CreateStaticPolygon(int x, int y, int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
-
-	b2RevoluteJoint* Jleft;
-	b2RevoluteJoint* Jright;
 
 	b2World* world;
 

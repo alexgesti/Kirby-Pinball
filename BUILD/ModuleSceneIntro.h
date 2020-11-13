@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "ModulePhysics.h"
 
 class PhysBody;
 
@@ -28,6 +29,9 @@ public:
 
 	PhysBody* sensor;
 	bool sensed;
+
+	b2RevoluteJoint* Jleft;
+	b2RevoluteJoint* Jright;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;

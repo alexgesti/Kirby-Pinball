@@ -35,54 +35,56 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
-	{
-		int Flapperlc[16] = {
-			110, 41,
-			110, 50,
-			105, 55,
-			21, 45,
-			1, 35,
-			1, 11,
-			11, 1,
-			35, 1,
-		};
-		flapperl.add(App->physics->CreateChain(0, 0, Flapperlc, 16));
-		holderl.add(App->physics->CreateRectangle(((SCREEN_WIDTH / 2) - 112 - (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 11, 11));
+	//Flapper left
+	int Flapperlc[16]{
+		110, 41,
+		110, 50,
+		105, 55,
+		21, 45,
+		1, 35,
+		1, 11,
+		11, 1,
+		35, 1,
+	};
+
+	flapperl.add(App->physics->CreateDynamicPolygon(0, 0, Flapperlc, 16));
+	holderl.add(App->physics->CreateStaticCircle(((SCREEN_WIDTH / 2) - 112 - (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 6));
 	
-		b2RevoluteJointDef Left;
-		Left.bodyA = flapperl.getLast()->data->body;
-		Left.bodyB = holderl.getLast()->data->body;
-		Left.collideConnected = false;
-		Left.upperAngle = 25 * DEGTORAD;
-		Left.lowerAngle = -25 * DEGTORAD;
-		Left.enableLimit = true;
-		Left.localAnchorA.Set(PIXEL_TO_METERS(23), PIXEL_TO_METERS(23));
-		App->physics->Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Left);
-	}
-	{
-		int Flapperrc[16] = {
-			1, 41,
-			1, 50,
-			6, 55,
-			90, 45,
-			110, 35,
-			110, 11,
-			100, 1,
-			76, 1,
-		};
-		flapperr.add(App->physics->CreateChain( 0, 0, Flapperrc, 16));
-		holderr.add(App->physics->CreateRectangle(((SCREEN_WIDTH / 2) + 112 + (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 11, 11));
+	b2RevoluteJointDef Left;
+	Left.bodyA = flapperl.getLast()->data->body;
+	Left.bodyB = holderl.getLast()->data->body;
+	Left.collideConnected = false;
+	Left.upperAngle = 50 * DEGTORAD;
+	Left.lowerAngle = 0 * DEGTORAD;
+	Left.enableLimit = true;
+	Left.localAnchorA.Set(PIXEL_TO_METERS(23), PIXEL_TO_METERS(23));
+	Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Left);
 	
-		b2RevoluteJointDef Right;
-		Right.bodyA = flapperr.getLast()->data->body;
-		Right.bodyB = holderr.getLast()->data->body;
-		Right.collideConnected = false;
-		Right.upperAngle = 25 * DEGTORAD;
-		Right.lowerAngle = -25 * DEGTORAD;
-		Right.enableLimit = true;
-		Right.localAnchorA.Set(PIXEL_TO_METERS(88), PIXEL_TO_METERS(23));
-		App->physics->Jleft = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Right);
-	}
+	//Flapper Right
+	int Flapperrc[16]{
+		1, 41,
+		1, 50,
+		6, 55,
+		90, 45,
+		110, 35,
+		110, 11,
+		100, 1,
+		76, 1,
+	};
+
+	flapperr.add(App->physics->CreateDynamicPolygon(0, 0, Flapperrc, 16));
+	holderr.add(App->physics->CreateStaticCircle(((SCREEN_WIDTH / 2) + 112 + (90 / 2)), (SCREEN_HEIGHT - (70 / 2) - 110), 6));
+	
+	b2RevoluteJointDef Right;
+	Right.bodyA = flapperr.getLast()->data->body;
+	Right.bodyB = holderr.getLast()->data->body;
+	Right.collideConnected = false;
+	Right.referenceAngle = 310 * DEGTORAD;
+	Right.upperAngle = 50 * DEGTORAD;
+	Right.lowerAngle = 0 * DEGTORAD;
+	Right.enableLimit = true;
+	Right.localAnchorA.Set(PIXEL_TO_METERS(88), PIXEL_TO_METERS(23));
+	Jright = (b2RevoluteJoint*)App->physics->world->CreateJoint(&Right);
 
 	return ret;
 }
@@ -107,23 +109,27 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
 		circles.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		boxes.add(App->physics->CreateDynamicRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-		kirbys.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
-		flapperl.getLast()->data->body->ApplyForce({ 0, -500 }, { 110, 41 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		flapperl.getLast()->data->body->ApplyForce({ 0, 100 }, { 0, 0 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+		flapperl.getLast()->data->body->ApplyForce({ 0, -50 }, { 0, 0 }, true);
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-		flapperr.getLast()->data->body->ApplyForce({ 0, -500 }, { 1, 41 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		flapperr.getLast()->data->body->ApplyForce({ 0, -100 }, { 6, 50 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+		flapperr.getLast()->data->body->ApplyForce({ 0, 50 }, { 6, 50 }, true);
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -178,7 +184,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		c = c->next;
 	}
 
@@ -188,7 +194,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		c = c->next;
 	}
 

@@ -4,6 +4,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "ModulePhysics.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -20,8 +21,6 @@ public:
 
 public:
 	p2List<PhysBody*> mapt;
-	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> kirbys;
 	p2List<PhysBody*> flapperl;
 	p2List<PhysBody*> flapperr;
@@ -31,21 +30,29 @@ public:
 	p2List<PhysBody*> tubor;
 	p2List<PhysBody*> trianl;
 	p2List<PhysBody*> trianr;
+	p2List<PhysBody*> mrshines;
 
-	PhysBody* sensor;
-	bool sensed;
+	bool MrBrightAppear;
 
 	b2RevoluteJoint* Jleft;
 	b2RevoluteJoint* Jright;
 
-	SDL_Texture* circle;
-	SDL_Texture* box;
 	SDL_Texture* kirby;
 	SDL_Texture* flipperl;
 	SDL_Texture* flipperr;
 	SDL_Texture* maptt;
+	SDL_Texture* mrshine;
+	SDL_Texture* mrbrightMap;
+	SDL_Texture* mrshineMap;
+
+	// A set of animations
+	Animation* mrshinecurrentAnim;
+	Animation SmovingR;
+	Animation SHitR;
+
+
+	// MrShine parameters
+	float SHitTemp;
 
 	uint bonus_fx;
-	p2Point<int> ray;
-	bool ray_on;
 };

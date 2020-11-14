@@ -1,55 +1,12 @@
 ﻿  Application.cpp
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(59,19): warning C4244: 'initializing': conversion from 'const float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(61,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(68,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   ModuleSceneIntro.cpp
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(305,45): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
-          with
-          [
-              TYPE=int
-          ]
-          and
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(305,30): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
-          with
-          [
-              TYPE=int
-          ]
-          and
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(307,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(309,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(309,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(312,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(312,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(312,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(312,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(320,9): warning C4101: 'y': variable local sin referencia
-C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(320,6): warning C4101: 'x': variable local sin referencia
-  Generando código...
-  SDL Game.vcxproj -> C:\Users\raulc\Documents\GitHub\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.exe
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(59,19): warning C4244: 'initializing': conversion from 'const float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(61,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(68,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(298,9): warning C4101: 'y': unreferenced local variable
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(298,6): warning C4101: 'x': unreferenced local variable
+  Generating Code...
+  SDL Game.vcxproj -> D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.exe

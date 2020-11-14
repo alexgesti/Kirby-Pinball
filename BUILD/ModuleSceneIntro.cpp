@@ -9,9 +9,18 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = kirby = NULL;
-	ray_on = false;
-	sensed = false;
+	kirby = NULL;
+
+	//Mr Shine
+	SmovingR.PushBack({ 224, 0, 112, 112 });
+	SmovingR.PushBack({ 112, 0, 112, 112 });
+	SmovingR.loop = true;
+	SmovingR.speed = 0.05f;
+
+	SHitR.PushBack({ 448, 0, 112, 112 });
+	SHitR.PushBack({ 560, 0, 112, 112 });
+	SHitR.loop = true;
+	SHitR.speed = 0.1f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -26,15 +35,23 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	maptt = App->textures->Load("Assets/sprites/Fondo_Sprite.png");
-	circle = App->textures->Load("Assets/sprites/wheel.png"); 
-	box = App->textures->Load("Assets/sprites/crate.png");
 	kirby = App->textures->Load("Assets/sprites/Kirby_64_ball.png");
 	flipperl = App->textures->Load("Assets/sprites/Flippersl.png");
 	flipperr = App->textures->Load("Assets/sprites/Flippersr.png");
+	mrshine = App->textures->Load("Assets/sprites/MrShine.png");
+	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
+	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
 
-	bonus_fx = App->audio->LoadFx("Assets/wab/bonus.wav");
+	bonus_fx = App->audio->LoadFx("Assets/audio/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	App->audio->PlayMusic("Assets/audio/Bubly.ogg", 0);
+
+	MrBrightAppear = false;
+
+	// Mr Shine parameters
+	mrshinecurrentAnim = &SmovingR;
+
+	SHitTemp = 60;
 
 	//Flapper left
 	int Flapperlc[16]
@@ -178,88 +195,38 @@ bool ModuleSceneIntro::Start()
 
 	trianr.add(App->physics->CreateStaticChain(0, 0, Trianrc, 6));
 
+	mrshines.add(App->physics->CreateStaticCircle(135, 140, 30));
+	mrshines.getLast()->data->listener = this;
+
 	return ret;
-}
-
-// Load assets
-bool ModuleSceneIntro::CleanUp()
-{
-	LOG("Unloading Intro scene");
-
-	return true;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
-		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateDynamicRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 28));
+		kirbys.getLast()->data->listener = this;
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		flapperl.getLast()->data->body->ApplyForce({ 0, 100 }, { 0, 0 }, true);
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
-		flapperl.getLast()->data->body->ApplyForce({ 0, -15 }, { 0, 0 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		flapperl.getLast()->data->body->ApplyForce({ 0, 200 }, { 0, 0 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_IDLE)
+		flapperl.getLast()->data->body->ApplyForce({ 0, -30 }, { 0, 0 }, true);
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		flapperr.getLast()->data->body->ApplyForce({ 0, -100 }, { 6, 50 }, true);
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE)
-		flapperr.getLast()->data->body->ApplyForce({ 0, 15 }, { 6, 50 }, true);
-
-	// Prepare for raycast ------------------------------------------------------
-	
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-	int ray_hit = ray.DistanceTo(mouse);
-
-	fVector normal(0.0f, 0.0f);
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		flapperr.getLast()->data->body->ApplyForce({ 0, -200 }, { 6, 50 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_IDLE)
+		flapperr.getLast()->data->body->ApplyForce({ 0, 30 }, { 6, 50 }, true);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	p2List_item<PhysBody*>* c = mapt.getFirst();
 
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
+	// Scenary Boss Background
 
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if(ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if(hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = mapt.getFirst();
+	if (MrBrightAppear) App->renderer->Blit(mrbrightMap, 0, 0, NULL);
+	else App->renderer->Blit(mrshineMap, 0, 0, NULL);
 
 	while (c != NULL)
 	{
@@ -269,15 +236,35 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
+	// Mr Shine
+
+	c = mrshines.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
+
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(mrshine, x - 32, y - 42, &rect);
+		c = c->next;
+	}
+
+	SHitTemp++;
+
+	// Kirby
+
 	c = kirbys.getFirst();
 
 	while(c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(kirby, x -5 , y-5, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(kirby, x - 5 , y - 5, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
+
+	// Flapper Left
 
 	c = flapperl.getFirst();
 
@@ -289,6 +276,8 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
+	// Flapper Right
+
 	c = flapperr.getFirst();
 
 	while (c != NULL)
@@ -299,18 +288,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	// ray -----------------
-	if(ray_on == true)
-	{
-		fVector destination(mouse.x-ray.x, mouse.y-ray.y);
-		destination.Normalize();
-		destination *= ray_hit;
-
-		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
-
-		if(normal.x != 0.0f)
-			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
-	}
+	mrshinecurrentAnim->Update();
 
 	return UPDATE_CONTINUE;
 }
@@ -319,18 +297,28 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
-
-	/*
-	if(bodyA)
+	if(bodyA->body == kirbys.getLast()->data->body && bodyB->body == mrshines.getLast()->data->body)
 	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+		mrshinecurrentAnim = &SHitR;
+		SHitTemp = 0;
+	}
+	else if (SHitTemp >= 60)
+	{
+		mrshinecurrentAnim = &SmovingR;
 	}
 
+	/*
 	if(bodyB)
 	{
 		bodyB->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
 	}*/
+}
+
+// Load assets
+bool ModuleSceneIntro::CleanUp()
+{
+	LOG("Unloading Intro scene");
+
+	return true;
 }

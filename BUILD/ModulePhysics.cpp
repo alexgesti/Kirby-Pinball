@@ -417,23 +417,8 @@ update_status ModulePhysics::PostUpdate()
 				}
 				break;
 			}
-
-			// TODO 1: If mouse button 1 is pressed ...
-			// App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
-			// test if the current body contains mouse position
 		}
 	}
-
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
-
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
-
-	// TODO 4: If the player releases the mouse button, destroy the joint
 
 	return UPDATE_CONTINUE;
 }
@@ -476,40 +461,6 @@ bool PhysBody::Contains(int x, int y) const
 	}
 
 	return false;
-}
-
-int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
-{
-	int ret = -1;
-
-	b2RayCastInput input;
-	b2RayCastOutput output;
-
-	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
-	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	input.maxFraction = 1.0f;
-
-	const b2Fixture* fixture = body->GetFixtureList();
-
-	while(fixture != NULL)
-	{
-		if(fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
-		{
-			// do we want the normal ?
-
-			float fx = x2 - x1;
-			float fy = y2 - y1;
-			float dist = sqrtf((fx*fx) + (fy*fy));
-
-			normal_x = output.normal.x;
-			normal_y = output.normal.y;
-
-			return output.fraction * dist;
-		}
-		fixture = fixture->GetNext();
-	}
-
-	return ret;
 }
 
 void ModulePhysics::BeginContact(b2Contact* contact)

@@ -21,6 +21,13 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	SHitR.PushBack({ 560, 0, 112, 112 });
 	SHitR.loop = true;
 	SHitR.speed = 0.1f;
+
+	BmovingR.PushBack({ 2, 2, 76, 80 });
+	BmovingR.PushBack({ 78, 2, 76, 80 });
+	BmovingR.loop = true;
+	BmovingR.speed = 0.05f;
+
+	BHitR.PushBack({ 154, 2, 76, 80 });
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -39,6 +46,7 @@ bool ModuleSceneIntro::Start()
 	flipperl = App->textures->Load("Assets/sprites/Flippersl.png");
 	flipperr = App->textures->Load("Assets/sprites/Flippersr.png");
 	mrshine = App->textures->Load("Assets/sprites/MrShine.png");
+	mrbright = App->textures->Load("Assets/sprites/MrBright.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
 
@@ -51,7 +59,9 @@ bool ModuleSceneIntro::Start()
 	// Mr Shine parameters
 	mrshinecurrentAnim = &SmovingR;
 
+	hitboss = 0;
 	SHitTemp = 60;
+	BHitTemp = 60;
 
 	//Flapper left
 	int Flapperlc[16]
@@ -118,7 +128,7 @@ bool ModuleSceneIntro::Start()
 		82, 379,
 		106, 370,
 		106, 350,
-		77, 350,
+		77, 349,
 		53, 340,
 		44, 330,
 		34, 306,
@@ -134,7 +144,7 @@ bool ModuleSceneIntro::Start()
 		724, 330,
 		715, 340,
 		691, 350,
-		662, 350,
+		662, 349,
 		662, 370,
 		686, 379,
 		700, 394,
@@ -240,17 +250,39 @@ update_status ModuleSceneIntro::Update()
 
 	c = mrshines.getFirst();
 
-	while (c != NULL)
+	if (hitboss >= 5 && SHitTemp >= 60)
 	{
-		int x, y;
-		SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
+		MrBrightAppear = true;
 
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(mrshine, x - 32, y - 42, &rect);
-		c = c->next;
+		if (hitboss == 5) {
+			mrshinecurrentAnim = &BmovingR;
+		}
+
+		while (c != NULL)
+		{
+			int x, y;
+			SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
+
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(mrbright, x, y, &rect);
+			c = c->next;
+		}
+
+		BHitTemp++;
 	}
+	else {
+		while (c != NULL)
+		{
+			int x, y;
+			SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
 
-	SHitTemp++;
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(mrshine, x - 32, y - 42, &rect);
+			c = c->next;
+		}
+
+		SHitTemp++;
+	}
 
 	// Kirby
 
@@ -297,14 +329,66 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	if(bodyA->body == kirbys.getLast()->data->body && bodyB->body == mrshines.getLast()->data->body)
+	if (hitboss >= 5 && SHitTemp >= 60)
 	{
-		mrshinecurrentAnim = &SHitR;
-		SHitTemp = 0;
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mrshines.getLast()->data->body)
+		{
+			mrshinecurrentAnim = &BHitR;
+			BHitTemp = 0;
+			if (hitOnce == false) 
+			{
+				hitboss++;
+				hitOnce = true;
+			}
+		}
+		else if (BHitTemp >= 60)
+		{
+			mrshinecurrentAnim = &BmovingR;
+		}
+
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
 	}
-	else if (SHitTemp >= 60)
+	else
 	{
-		mrshinecurrentAnim = &SmovingR;
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mrshines.getLast()->data->body)
+		{
+			mrshinecurrentAnim = &SHitR;
+			SHitTemp = 0;
+			if (hitOnce == false)
+			{
+				hitboss++;
+				hitOnce = true;
+				LOG("%d", hitboss)
+			}
+		}
+		else if (SHitTemp >= 60)
+		{
+			mrshinecurrentAnim = &SmovingR;	
+		}
+
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
+		{
+			hitOnce = false;
+		}
 	}
 
 	/*

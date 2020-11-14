@@ -33,6 +33,8 @@ public:
 	p2List<PhysBody*> mrshines;
 
 	bool MrBrightAppear;
+	bool hitOnce;
+	int hitboss;
 
 	b2RevoluteJoint* Jleft;
 	b2RevoluteJoint* Jright;
@@ -42,17 +44,22 @@ public:
 	SDL_Texture* flipperr;
 	SDL_Texture* maptt;
 	SDL_Texture* mrshine;
+	SDL_Texture* mrbright;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;
 
 	// A set of animations
 	Animation* mrshinecurrentAnim;
+
 	Animation SmovingR;
 	Animation SHitR;
 
+	Animation BmovingR;
+	Animation BHitR;
 
 	// MrShine parameters
 	float SHitTemp;
+	float BHitTemp;
 
 	uint bonus_fx;
 };

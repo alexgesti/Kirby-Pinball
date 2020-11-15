@@ -32,10 +32,15 @@ public:
 	p2List<PhysBody*> trianr;
 	p2List<PhysBody*> mrshines;
 
+	// Counter GameOver Sound
+	float MusicGOStop = 0;
+
 	// Bosses Live & End
 	bool MrBrightAppear;
 	bool hitOnce;
 	bool YouWin;
+	bool YouLost;
+	bool ChangeMusic;
 	bool debug;
 	int hitboss;
 	int klives;
@@ -54,6 +59,8 @@ public:
 	SDL_Texture* cloud;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;
+	SDL_Texture* GameOver;
+	SDL_Texture* Life;
 
 	// Win Texture set
 	SDL_Texture* wintext1;
@@ -74,6 +81,7 @@ public:
 	// A set of animations
 	Animation* mrshinecurrentAnim;
 	Animation* wincurrentAnim;
+	Animation* gamecurrentAnim;
 
 	Animation SmovingR;
 	Animation SHitR;
@@ -85,6 +93,8 @@ public:
 
 	Animation cloudAnim;
 	Animation cloudhit;
+
+	Animation GameOverAnim;
 
 	// Win Anim Set
 	Animation WinAnim1;

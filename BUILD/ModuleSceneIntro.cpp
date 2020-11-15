@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePoints.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -40,6 +41,12 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	SparksHit.loop = true;
 	SparksHit.speed = 0.2f;
 
+	//GameOver
+	GameOverAnim.PushBack({ 0, 0, 323, 220 });
+	GameOverAnim.PushBack({ 323, 0, 323, 220 });
+	GameOverAnim.loop = true;
+	GameOverAnim.speed = 0.05f;
+
 	//Kirby Win
 	WinAnim1.PushBack({ 0, 0, 323, 220 }); // 1
 	WinAnim1.PushBack({ 323, 0, 323, 220 }); // 2
@@ -68,20 +75,20 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	WinAnim13.PushBack({ 0, 0, 323, 220 }); // 25
 	WinAnim13.PushBack({ 323, 0, 323, 220 }); // 26
 	WinAnim14.PushBack({ 0, 0, 323, 220 }); // 27
-	WinAnim1.speed = 0.1f; 
-	WinAnim2.speed = 0.1f;
-	WinAnim3.speed = 0.1f;
-	WinAnim4.speed = 0.1f;
-	WinAnim5.speed = 0.1f;
-	WinAnim6.speed = 0.1f;
-	WinAnim7.speed = 0.1f;
-	WinAnim8.speed = 0.1f;
-	WinAnim9.speed = 0.1f;
-	WinAnim10.speed = 0.1f;
-	WinAnim11.speed = 0.1f;
-	WinAnim12.speed = 0.1f;
-	WinAnim13.speed = 0.1f;
-	WinAnim14.speed = 0.1f;
+	WinAnim1.speed = 0.17f; 
+	WinAnim2.speed = 0.17f;
+	WinAnim3.speed = 0.17f;
+	WinAnim4.speed = 0.17f;
+	WinAnim5.speed = 0.17f;
+	WinAnim6.speed = 0.17f;
+	WinAnim7.speed = 0.17f;
+	WinAnim8.speed = 0.17f;
+	WinAnim9.speed = 0.17f;
+	WinAnim10.speed = 0.17f;
+	WinAnim11.speed = 0.17f;
+	WinAnim12.speed = 0.17f;
+	WinAnim13.speed = 0.17f;
+	WinAnim14.speed = 0.17f;
 
 	//cloudAnim.PushBack({80, 60, 4, 4});
 	//cloudhit.PushBack({84, 86, 88, 4});
@@ -110,6 +117,8 @@ bool ModuleSceneIntro::Start()
 	cloud = App->textures->Load("Assets/sprites/Nube.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
+	GameOver = App->textures->Load("Assets/sprites/GameOver.png");
+	Life = App->textures->Load("Assets/sprites/Life.png");
 	
 	// Win textures call
 	wintext1 = App->textures->Load("Assets/sprites/Win_Dance1.png");
@@ -143,6 +152,9 @@ bool ModuleSceneIntro::Start()
 	BHitTemp = 60;
 	klives = 3;
 
+	//Win/Lose Anim Start
+
+	gamecurrentAnim = &GameOverAnim;
 	wincurrentAnim = &WinAnim1;
 
 	//Flapper left
@@ -299,13 +311,14 @@ bool ModuleSceneIntro::Start()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 28));
 		kirbys.getLast()->data->listener = this;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) YouWin = true;
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) YouWin = true;
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) YouLost = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
@@ -348,10 +361,11 @@ update_status ModuleSceneIntro::Update()
 				kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
 				kirbys.getLast()->data->listener = this;
 			}
+			else YouLost = true;
 		}
 		c = c->next;
 	}
-	
+
 	// Scenary Boss Background
 	if (MrBrightAppear) App->renderer->Blit(mrbrightMap, 0, 0, NULL);
 	else App->renderer->Blit(mrshineMap, 0, 0, NULL);
@@ -435,9 +449,20 @@ update_status ModuleSceneIntro::Update()
 		YouWin = true;
 	}
 
+	// Life Printing
+	if (klives >= 1) App->renderer->Blit(Life, 0, SCREEN_HEIGHT - 48, NULL);
+	if (klives >= 2) App->renderer->Blit(Life, 48, SCREEN_HEIGHT - 48, NULL);
+	if (klives >= 3) App->renderer->Blit(Life, 96, SCREEN_HEIGHT - 48, NULL);
+
 	// Win Dance
-	if (YouWin)
+	if (YouWin && YouLost == false)
 	{
+		if (ChangeMusic == false)
+		{
+			App->audio->PlayMusic("Assets/audio/CelebrationDance_Short.ogg", 0);
+			ChangeMusic = true;
+		}
+
 		if (WinAnim1.FinishedAlready == true && WinAnim2.FinishedAlready == false) wincurrentAnim = &WinAnim2;
 		else if (WinAnim2.FinishedAlready == true && WinAnim3.FinishedAlready == false) wincurrentAnim = &WinAnim3;
 		else if (WinAnim3.FinishedAlready == true && WinAnim4.FinishedAlready == false) wincurrentAnim = &WinAnim4;
@@ -469,9 +494,28 @@ update_status ModuleSceneIntro::Update()
 		else if (WinAnim11.FinishedAlready == true && WinAnim12.FinishedAlready == false) App->renderer->Blit(wintext12, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) App->renderer->Blit(wintext13, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim13.FinishedAlready == true) App->renderer->Blit(wintext14, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		
+		if (WinAnim14.FinishedAlready) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
 
+		wincurrentAnim->Update(); 
+	}
 
-		wincurrentAnim->Update();
+	// Game Over
+	if (YouLost && YouWin == false)
+	{
+		if (ChangeMusic == false)
+		{
+			App->audio->PlayMusic("Assets/audio/GameOver.ogg", 0);
+			ChangeMusic = true;
+		}
+
+		SDL_Rect rect = gamecurrentAnim->GetCurrentFrame();
+		App->renderer->Blit(GameOver, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+
+		if (MusicGOStop < 170) MusicGOStop++;
+		if (MusicGOStop >= 170) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
+
+		gamecurrentAnim->Update();
 	}
 
 	// Flapper Left
@@ -508,6 +552,8 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	mrshinecurrentAnim->Update();
+
+	//App->points->returnPoints();
 
 	return UPDATE_CONTINUE;
 }

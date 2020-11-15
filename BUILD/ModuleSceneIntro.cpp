@@ -133,6 +133,7 @@ bool ModuleSceneIntro::Start()
 
 	MrBrightAppear = false;
 	YouWin = false;
+	debug = false;
 
 	// Mr Shine parameters
 	mrshinecurrentAnim = &SmovingR;
@@ -306,6 +307,18 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) YouWin = true;
 
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		if (debug)
+		{
+			debug = false;
+		}
+		else if (debug == false)
+		{
+			debug = true;
+		}
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		flapperl.getLast()->data->body->ApplyForce({ 0, 200 }, { 0, 0 }, true);
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_IDLE)
@@ -322,6 +335,11 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
+		if (debug)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(App->input->GetMouseX(), App->input->GetMouseY())), 0);
+			c->data->body->SetLinearVelocity(b2Vec2(0, 0));
+		}
 		if (y > 1000) 
 		{
 			klives--;

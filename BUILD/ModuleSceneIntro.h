@@ -35,9 +35,10 @@ public:
 	// Bosses Live & End
 	bool MrBrightAppear;
 	bool hitOnce;
+	bool YouWin;
+	bool debug;
 	int hitboss;
 	int klives;
-	bool YouWin;
 
 	b2RevoluteJoint* Jleft;
 	b2RevoluteJoint* Jright;

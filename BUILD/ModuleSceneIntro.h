@@ -37,8 +37,9 @@ public:
 	p2List<PhysBody*> cloudstar4;
 	p2List<PhysBody*> cloudstar5;
 	
-	// Counter GameOver Sound
+	// Counter Win&GameOver Sound
 	float MusicGOStop = 0;
+	float MusicWinStop = 0;
 
 	// Bosses Live & End
 	bool Hit1;
@@ -74,7 +75,9 @@ public:
 	SDL_Texture* mrshine;
 	SDL_Texture* mrbright;
 	SDL_Texture* sparkhit;
-	SDL_Texture* star;
+	SDL_Texture* star1;
+	SDL_Texture* star2;
+	SDL_Texture* star3;
 	SDL_Texture* cloud;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;

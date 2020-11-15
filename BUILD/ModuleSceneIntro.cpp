@@ -111,7 +111,9 @@ bool ModuleSceneIntro::Start()
 	mrshine = App->textures->Load("Assets/sprites/MrShine.png");
 	mrbright = App->textures->Load("Assets/sprites/MrBright.png");
 	sparkhit = App->textures->Load("Assets/sprites/Star_KO.png");
-	star = App->textures->Load("Assets/sprites/Star_1.png");
+	star1 = App->textures->Load("Assets/sprites/Star_1.png");
+	star2 = App->textures->Load("Assets/sprites/Star_2.png");
+	star3 = App->textures->Load("Assets/sprites/Star_3.png");
 	cloud = App->textures->Load("Assets/sprites/Nube.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
@@ -375,10 +377,10 @@ update_status ModuleSceneIntro::Update()
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(App->input->GetMouseX(), App->input->GetMouseY())), 0);
 			c->data->body->SetLinearVelocity(b2Vec2(0, 0));
 		}
-		if (y > 1000) 
+		if (y > 1000 && YouWin == false)
 		{
 			klives--;
-			if (klives > 0 && YouWin == false)
+			if (klives > 0)
 			{
 				kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
 				kirbys.getLast()->data->listener = this;
@@ -542,7 +544,7 @@ update_status ModuleSceneIntro::Update()
 		else if (MrBrightAppear)
 		{
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 + 150, 220)), 0);
-			App->renderer->Blit(star, x - 13, y - 20);
+			App->renderer->Blit(star1, x - 13, y - 20);
 			if (counthit1 >= 1)
 			{
 				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
@@ -573,7 +575,7 @@ update_status ModuleSceneIntro::Update()
 		else if (MrBrightAppear)
 		{
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 - 150, 220)), 0);
-			App->renderer->Blit(star, x - 13, y - 20, &rect);
+			App->renderer->Blit(star3, x - 13, y - 3, &rect);
 			if (counthit2 >= 1)
 			{
 				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
@@ -592,7 +594,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 
-		App->renderer->Blit(star, x - 13, y - 20);
+		App->renderer->Blit(star2, x - 13, y - 10);
 		if (MrBrightAppear)
 		{
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 + 100, 120)), 0);
@@ -613,7 +615,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 
-		App->renderer->Blit(star, x - 13, y - 20);
+		App->renderer->Blit(star1, x - 13, y - 20);
 		if (MrBrightAppear)
 		{
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 - 100, 120)), 0);
@@ -634,7 +636,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 
-		App->renderer->Blit(star, x - 13, y - 20);
+		App->renderer->Blit(star3, x - 10, y - 5);
 		if (MrBrightAppear)
 		{
 			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2, 270)), 0);
@@ -689,7 +691,8 @@ update_status ModuleSceneIntro::Update()
 		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) App->renderer->Blit(wintext13, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim13.FinishedAlready == true) App->renderer->Blit(wintext14, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 
-		if (WinAnim14.FinishedAlready) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
+		if (MusicWinStop < 180) MusicWinStop++;
+		if (MusicWinStop >= 180) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
 
 		wincurrentAnim->Update();
 	}

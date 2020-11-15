@@ -51,9 +51,24 @@ public:
 	SDL_Texture* sparkhit;
 	SDL_Texture* star;
 	SDL_Texture* cloud;
-	SDL_Texture* wintext;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;
+
+	// Win Texture set
+	SDL_Texture* wintext1;
+	SDL_Texture* wintext2;
+	SDL_Texture* wintext3;
+	SDL_Texture* wintext4;
+	SDL_Texture* wintext5;
+	SDL_Texture* wintext6;
+	SDL_Texture* wintext7;
+	SDL_Texture* wintext8;
+	SDL_Texture* wintext9;
+	SDL_Texture* wintext10;
+	SDL_Texture* wintext11;
+	SDL_Texture* wintext12;
+	SDL_Texture* wintext13;
+	SDL_Texture* wintext14;
 
 	// A set of animations
 	Animation* mrshinecurrentAnim;
@@ -70,7 +85,21 @@ public:
 	Animation cloudAnim;
 	Animation cloudhit;
 
-	Animation WinAnim;
+	// Win Anim Set
+	Animation WinAnim1;
+	Animation WinAnim2;
+	Animation WinAnim3;
+	Animation WinAnim4;
+	Animation WinAnim5;
+	Animation WinAnim6;
+	Animation WinAnim7;
+	Animation WinAnim8;
+	Animation WinAnim9;
+	Animation WinAnim10;
+	Animation WinAnim11;
+	Animation WinAnim12;
+	Animation WinAnim13;
+	Animation WinAnim14;
 
 	// MrShine parameters
 	float SHitTemp;

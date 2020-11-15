@@ -41,38 +41,50 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	SparksHit.speed = 0.2f;
 
 	//Kirby Win
-	WinAnim.PushBack({ 0, 0, 768, 729 }); // 1
-	WinAnim.PushBack({ 768, 0, 768, 729 }); // 2
-	WinAnim.PushBack({ 1536, 0, 768, 729 }); // 3
-	WinAnim.PushBack({ 2304, 0, 768, 729 }); // 4
-	WinAnim.PushBack({ 3072, 0, 768, 729 }); // 5
-	WinAnim.PushBack({ 3840, 0, 768, 729 }); // 6
-	WinAnim.PushBack({ 4608, 0, 768, 729 }); // 7
-	WinAnim.PushBack({ 5376, 0, 768, 729 }); // 8
-	WinAnim.PushBack({ 6144, 0, 768, 729 }); // 9
-	WinAnim.PushBack({ 6912, 0, 768, 729 }); // 10
-	WinAnim.PushBack({ 7680, 0, 768, 729 }); // 11
-	WinAnim.PushBack({ 8448, 0, 768, 729 }); // 12
-	WinAnim.PushBack({ 9216, 0, 768, 729 }); // 13
-	WinAnim.PushBack({ 9984, 0, 768, 729 }); // 14
-	WinAnim.PushBack({ 10752, 0, 768, 729 }); // 15
-	WinAnim.PushBack({ 11520, 0, 768, 729 }); // 16
-	WinAnim.PushBack({ 12288, 0, 768, 729 }); // 17
-	WinAnim.PushBack({ 13056, 0, 768, 729 }); // 18
-	WinAnim.PushBack({ 13824, 0, 768, 729 }); // 19
-	WinAnim.PushBack({ 14592, 0, 768, 729 }); // 20
-	WinAnim.PushBack({ 15360, 0, 768, 729 }); // 21
-	WinAnim.PushBack({ 16128, 0, 768, 729 }); // 22
-	WinAnim.PushBack({ 16896, 0, 768, 729 }); // 23
-	WinAnim.PushBack({ 17664, 0, 768, 729 }); // 24
-	WinAnim.PushBack({ 18432, 0, 768, 729 }); // 25
-	WinAnim.PushBack({ 19200, 0, 768, 729 }); // 26
-	WinAnim.PushBack({ 19968, 0, 768, 729 }); // 27
-	WinAnim.loop = false;
-	WinAnim.speed = 0.1f;
+	WinAnim1.PushBack({ 0, 0, 323, 220 }); // 1
+	WinAnim1.PushBack({ 323, 0, 323, 220 }); // 2
+	WinAnim2.PushBack({ 0, 0, 323, 220 }); // 3
+	WinAnim2.PushBack({ 323, 0, 323, 220 }); // 4
+	WinAnim3.PushBack({ 0, 0, 323, 220 }); // 5
+	WinAnim3.PushBack({ 323, 0, 323, 220 }); // 6
+	WinAnim4.PushBack({ 0, 0, 323, 220 }); // 7
+	WinAnim4.PushBack({ 323, 0, 323, 220 }); // 8
+	WinAnim5.PushBack({ 0, 0, 323, 220 }); // 9
+	WinAnim5.PushBack({ 323, 0, 323, 220 }); // 10
+	WinAnim6.PushBack({ 0, 0, 323, 220 }); // 11
+	WinAnim6.PushBack({ 323, 0, 323, 220 }); // 12
+	WinAnim7.PushBack({ 0, 0, 323, 220 }); // 13
+	WinAnim7.PushBack({ 323, 0, 323, 220 }); // 14
+	WinAnim8.PushBack({ 0, 0, 323, 220 }); // 15
+	WinAnim8.PushBack({ 323, 0, 323, 220 }); // 16
+	WinAnim9.PushBack({ 0, 0, 323, 220 }); // 17
+	WinAnim9.PushBack({ 323, 0, 323, 220 }); // 18
+	WinAnim10.PushBack({ 0, 0, 323, 220 }); // 19
+	WinAnim10.PushBack({ 323, 0, 323, 220 }); // 20
+	WinAnim11.PushBack({ 0, 0, 323, 220 }); // 21
+	WinAnim11.PushBack({ 323, 0, 323, 220 }); // 22
+	WinAnim12.PushBack({ 0, 0, 323, 220 }); // 23
+	WinAnim12.PushBack({ 323, 0, 323, 220 }); // 24
+	WinAnim13.PushBack({ 0, 0, 323, 220 }); // 25
+	WinAnim13.PushBack({ 323, 0, 323, 220 }); // 26
+	WinAnim14.PushBack({ 0, 0, 323, 220 }); // 27
+	WinAnim1.speed = 0.1f; 
+	WinAnim2.speed = 0.1f;
+	WinAnim3.speed = 0.1f;
+	WinAnim4.speed = 0.1f;
+	WinAnim5.speed = 0.1f;
+	WinAnim6.speed = 0.1f;
+	WinAnim7.speed = 0.1f;
+	WinAnim8.speed = 0.1f;
+	WinAnim9.speed = 0.1f;
+	WinAnim10.speed = 0.1f;
+	WinAnim11.speed = 0.1f;
+	WinAnim12.speed = 0.1f;
+	WinAnim13.speed = 0.1f;
+	WinAnim14.speed = 0.1f;
 
-	cloudAnim.PushBack({80, 60, 4, 4});
-	cloudhit.PushBack({84, 86, 88, 4});
+	//cloudAnim.PushBack({80, 60, 4, 4});
+	//cloudhit.PushBack({84, 86, 88, 4});
 
 }
 
@@ -96,9 +108,24 @@ bool ModuleSceneIntro::Start()
 	sparkhit = App->textures->Load("Assets/sprites/Star_KO.png");
 	star = App->textures->Load("Assets/sprites/Star_1.png");
 	cloud = App->textures->Load("Assets/sprites/Nube.png");
-	wintext = App->textures->Load("Assets/sprites/Win_Dance.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
+	
+	// Win textures call
+	wintext1 = App->textures->Load("Assets/sprites/Win_Dance1.png");
+	wintext2 = App->textures->Load("Assets/sprites/Win_Dance2.png");
+	wintext3 = App->textures->Load("Assets/sprites/Win_Dance3.png");
+	wintext4 = App->textures->Load("Assets/sprites/Win_Dance4.png");
+	wintext5 = App->textures->Load("Assets/sprites/Win_Dance5.png");
+	wintext6 = App->textures->Load("Assets/sprites/Win_Dance6.png");
+	wintext7 = App->textures->Load("Assets/sprites/Win_Dance7.png");
+	wintext8 = App->textures->Load("Assets/sprites/Win_Dance8.png");
+	wintext9 = App->textures->Load("Assets/sprites/Win_Dance9.png");
+	wintext10 = App->textures->Load("Assets/sprites/Win_Dance10.png");
+	wintext11 = App->textures->Load("Assets/sprites/Win_Dance11.png");
+	wintext12 = App->textures->Load("Assets/sprites/Win_Dance12.png");
+	wintext13 = App->textures->Load("Assets/sprites/Win_Dance13.png");
+	wintext14 = App->textures->Load("Assets/sprites/Win_Dance14.png");
 
 	bonus_fx = App->audio->LoadFx("Assets/audio/bonus.wav");
 
@@ -115,8 +142,7 @@ bool ModuleSceneIntro::Start()
 	BHitTemp = 60;
 	klives = 3;
 
-	// Win parameters
-	wincurrentAnim = &WinAnim;
+	wincurrentAnim = &WinAnim1;
 
 	//Flapper left
 	int Flapperlc[16]
@@ -278,6 +304,8 @@ update_status ModuleSceneIntro::Update()
 		kirbys.getLast()->data->listener = this;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) YouWin = true;
+
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		flapperl.getLast()->data->body->ApplyForce({ 0, 200 }, { 0, 0 }, true);
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_IDLE)
@@ -392,8 +420,39 @@ update_status ModuleSceneIntro::Update()
 	// Win Dance
 	if (YouWin)
 	{
+		if (WinAnim1.FinishedAlready == true && WinAnim2.FinishedAlready == false) wincurrentAnim = &WinAnim2;
+		else if (WinAnim2.FinishedAlready == true && WinAnim3.FinishedAlready == false) wincurrentAnim = &WinAnim3;
+		else if (WinAnim3.FinishedAlready == true && WinAnim4.FinishedAlready == false) wincurrentAnim = &WinAnim4;
+		else if (WinAnim4.FinishedAlready == true && WinAnim5.FinishedAlready == false) wincurrentAnim = &WinAnim5;
+		else if (WinAnim5.FinishedAlready == true && WinAnim6.FinishedAlready == false) wincurrentAnim = &WinAnim6;
+		else if (WinAnim6.FinishedAlready == true && WinAnim7.FinishedAlready == false) wincurrentAnim = &WinAnim7;
+		else if (WinAnim7.FinishedAlready == true && WinAnim8.FinishedAlready == false) wincurrentAnim = &WinAnim8;
+		else if (WinAnim8.FinishedAlready == true && WinAnim9.FinishedAlready == false) wincurrentAnim = &WinAnim9;
+		else if (WinAnim9.FinishedAlready == true && WinAnim10.FinishedAlready == false) wincurrentAnim = &WinAnim10;
+		else if (WinAnim10.FinishedAlready == true && WinAnim11.FinishedAlready == false) wincurrentAnim = &WinAnim11;
+		else if (WinAnim11.FinishedAlready == true && WinAnim12.FinishedAlready == false) wincurrentAnim = &WinAnim12;
+		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) wincurrentAnim = &WinAnim13;
+		else if (WinAnim13.FinishedAlready == true) wincurrentAnim = &WinAnim14;
+
 		SDL_Rect rect = wincurrentAnim->GetCurrentFrame();
-		App->renderer->Blit(wintext, 0, 0, &rect);
+
+		// FAKE'IT UNTIL YOU MAKE'IT
+		if (WinAnim1.FinishedAlready == false) App->renderer->Blit(wintext1, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim1.FinishedAlready == true && WinAnim2.FinishedAlready == false) App->renderer->Blit(wintext2, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim2.FinishedAlready == true && WinAnim3.FinishedAlready == false) App->renderer->Blit(wintext3, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim3.FinishedAlready == true && WinAnim4.FinishedAlready == false) App->renderer->Blit(wintext4, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim4.FinishedAlready == true && WinAnim5.FinishedAlready == false) App->renderer->Blit(wintext5, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim5.FinishedAlready == true && WinAnim6.FinishedAlready == false) App->renderer->Blit(wintext6, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim6.FinishedAlready == true && WinAnim7.FinishedAlready == false) App->renderer->Blit(wintext7, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim7.FinishedAlready == true && WinAnim8.FinishedAlready == false) App->renderer->Blit(wintext8, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim8.FinishedAlready == true && WinAnim9.FinishedAlready == false) App->renderer->Blit(wintext9, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim9.FinishedAlready == true && WinAnim10.FinishedAlready == false) App->renderer->Blit(wintext10, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim10.FinishedAlready == true && WinAnim11.FinishedAlready == false) App->renderer->Blit(wintext11, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim11.FinishedAlready == true && WinAnim12.FinishedAlready == false) App->renderer->Blit(wintext12, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) App->renderer->Blit(wintext13, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+		else if (WinAnim13.FinishedAlready == true) App->renderer->Blit(wintext14, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
+
+
 		wincurrentAnim->Update();
 	}
 

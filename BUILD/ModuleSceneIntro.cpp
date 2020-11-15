@@ -70,6 +70,10 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	WinAnim.PushBack({ 19968, 0, 768, 729 }); // 27
 	WinAnim.loop = false;
 	WinAnim.speed = 0.1f;
+
+	cloudAnim.PushBack({80, 60, 4, 4});
+	cloudhit.PushBack({84, 86, 88, 4});
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -90,6 +94,8 @@ bool ModuleSceneIntro::Start()
 	mrshine = App->textures->Load("Assets/sprites/MrShine.png");
 	mrbright = App->textures->Load("Assets/sprites/MrBright.png");
 	sparkhit = App->textures->Load("Assets/sprites/Star_KO.png");
+	star = App->textures->Load("Assets/sprites/Star_1.png");
+	cloud = App->textures->Load("Assets/sprites/Nube.png");
 	wintext = App->textures->Load("Assets/sprites/Win_Dance.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
@@ -107,6 +113,7 @@ bool ModuleSceneIntro::Start()
 	hitboss = 0;
 	SHitTemp = 60;
 	BHitTemp = 60;
+	klives = 3;
 
 	// Win parameters
 	wincurrentAnim = &WinAnim;
@@ -192,7 +199,7 @@ bool ModuleSceneIntro::Start()
 		724, 330,
 		715, 340,
 		691, 350,
-		662, 349,
+		662, 351,
 		662, 370,
 		686, 379,
 		700, 394,
@@ -256,6 +263,9 @@ bool ModuleSceneIntro::Start()
 	mrshines.add(App->physics->CreateStaticCircle(135, 140, 30));
 	mrshines.getLast()->data->listener = this;
 
+	kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
+	kirbys.getLast()->data->listener = this;
+
 	return ret;
 }
 
@@ -278,13 +288,30 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_IDLE)
 		flapperr.getLast()->data->body->ApplyForce({ 0, 30 }, { 6, 50 }, true);
 
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = mapt.getFirst();
+	p2List_item<PhysBody*>* c = kirbys.getLast();
 
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		if (y > 1000) 
+		{
+			klives--;
+			if (klives > 0)
+			{
+				kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
+				kirbys.getLast()->data->listener = this;
+			}
+		}
+		c = c->next;
+	}
+	
 	// Scenary Boss Background
-
 	if (MrBrightAppear) App->renderer->Blit(mrbrightMap, 0, 0, NULL);
 	else App->renderer->Blit(mrshineMap, 0, 0, NULL);
+
+	// All draw functions ------------------------------------------------------
+	c = mapt.getFirst();
 
 	while (c != NULL)
 	{
@@ -295,7 +322,6 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// Mr Shine & Mr Bright
-
 	c = mrshines.getFirst();
 
 	if (hitboss >= 5 && SHitTemp >= 60 && hitboss < 10)
@@ -318,8 +344,7 @@ update_status ModuleSceneIntro::Update()
 
 		BHitTemp++;
 	}
-	else if (hitboss >= 5 && SHitTemp < 60
-		|| hitboss >= 10 && BHitTemp < 60)
+	else if (hitboss >= 5 && SHitTemp < 60 || hitboss >= 10 && BHitTemp < 60)
 	{
 		mrshinecurrentAnim = &SparksHit;
 
@@ -365,7 +390,6 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// Win Dance
-
 	if (YouWin)
 	{
 		SDL_Rect rect = wincurrentAnim->GetCurrentFrame();
@@ -373,20 +397,7 @@ update_status ModuleSceneIntro::Update()
 		wincurrentAnim->Update();
 	}
 
-	// Kirby
-
-	c = kirbys.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(kirby, x - 5 , y - 5, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
 	// Flapper Left
-
 	c = flapperl.getFirst();
 
 	while (c != NULL)
@@ -398,7 +409,6 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// Flapper Right
-
 	c = flapperr.getFirst();
 
 	while (c != NULL)
@@ -409,8 +419,18 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
+	// Kirby
+	c = kirbys.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(kirby, x - 5, y - 5, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
 	mrshinecurrentAnim->Update();
-	
 
 	return UPDATE_CONTINUE;
 }

@@ -36,6 +36,7 @@ public:
 	bool MrBrightAppear;
 	bool hitOnce;
 	int hitboss;
+	int klives;
 	bool YouWin;
 
 	b2RevoluteJoint* Jleft;
@@ -48,6 +49,8 @@ public:
 	SDL_Texture* mrshine;
 	SDL_Texture* mrbright;
 	SDL_Texture* sparkhit;
+	SDL_Texture* star;
+	SDL_Texture* cloud;
 	SDL_Texture* wintext;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;
@@ -63,6 +66,9 @@ public:
 	Animation BHitR;
 
 	Animation SparksHit;
+
+	Animation cloudAnim;
+	Animation cloudhit;
 
 	Animation WinAnim;
 

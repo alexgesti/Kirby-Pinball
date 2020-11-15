@@ -136,7 +136,13 @@ bool ModuleSceneIntro::Start()
 	wintext13 = App->textures->Load("Assets/sprites/Win_Dance13.png");
 	wintext14 = App->textures->Load("Assets/sprites/Win_Dance14.png");
 
-	bonus_fx = App->audio->LoadFx("Assets/audio/bonus.wav");
+	WinSound = App->audio->LoadFx("Assets/audio/CelebrationDance_Short.ogg");
+	GameOverSound = App->audio->LoadFx("Assets/audio/GameOver.ogg");
+	PalaSound = App->audio->LoadFx("Assets/audio/Pala.wav");
+	KirbyDead = App->audio->LoadFx("Assets/audio/KirbyDead.wav");
+	KirbyAppear = App->audio->LoadFx("Assets/audio/KirbyAppear.wav");
+	EnemyHit = App->audio->LoadFx("Assets/audio/EnemyHit.wav");
+	TouchPala = App->audio->LoadFx("Assets/audio/TouchPala.wav");
 
 	App->audio->PlayMusic("Assets/audio/Bubly.ogg", 0);
 
@@ -339,6 +345,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		kirbys.add(App->physics->CreateDynamicCircle(App->input->GetMouseX(), App->input->GetMouseY(), 28));
 		kirbys.getLast()->data->listener = this;
+		App->audio->PlayFx(KirbyAppear);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) YouWin = true;
@@ -360,11 +367,15 @@ update_status ModuleSceneIntro::Update()
 		flapperl.getLast()->data->body->ApplyForce({ 0, 200 }, { 0, 0 }, true);
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_IDLE)
 		flapperl.getLast()->data->body->ApplyForce({ 0, -30 }, { 0, 0 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+		App->audio->PlayFx(PalaSound);
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		flapperr.getLast()->data->body->ApplyForce({ 0, -200 }, { 6, 50 }, true);
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_IDLE)
 		flapperr.getLast()->data->body->ApplyForce({ 0, 30 }, { 6, 50 }, true);
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+		App->audio->PlayFx(PalaSound);
 
 	p2List_item<PhysBody*>* c = kirbys.getLast();
 
@@ -384,6 +395,7 @@ update_status ModuleSceneIntro::Update()
 			{
 				kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
 				kirbys.getLast()->data->listener = this;
+				App->audio->PlayFx(KirbyDead);
 			}
 			else YouLost = true;
 		}
@@ -655,7 +667,8 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (ChangeMusic == false)
 		{
-			App->audio->PlayMusic("Assets/audio/CelebrationDance_Short.ogg", 0);
+			App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
+			App->audio->PlayFx(WinSound);
 			ChangeMusic = true;
 		}
 
@@ -691,9 +704,6 @@ update_status ModuleSceneIntro::Update()
 		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) App->renderer->Blit(wintext13, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim13.FinishedAlready == true) App->renderer->Blit(wintext14, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 
-		if (MusicWinStop < 180) MusicWinStop++;
-		if (MusicWinStop >= 180) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
-
 		wincurrentAnim->Update();
 	}
 
@@ -702,15 +712,13 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (ChangeMusic == false)
 		{
-			App->audio->PlayMusic("Assets/audio/GameOver.ogg", 0);
+			App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
+			App->audio->PlayFx(GameOverSound);
 			ChangeMusic = true;
 		}
 
 		SDL_Rect rect = gamecurrentAnim->GetCurrentFrame();
 		App->renderer->Blit(GameOver, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
-
-		if (MusicGOStop < 170) MusicGOStop++;
-		if (MusicGOStop >= 170) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
 
 		gamecurrentAnim->Update();
 	}
@@ -734,7 +742,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				hitboss++;
 				hitOnce = true;
-				LOG("%d", hitboss)
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 		else if (BHitTemp >= 60 && hitboss < 10)
@@ -752,7 +760,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				hitboss++;
 				hitOnce = true;
-				LOG("%d", hitboss)
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 		else if (SHitTemp >= 60 && hitboss < 5)
@@ -771,6 +779,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				counthit1++;
 				Hit1 = true;
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 		else if (MrBrightAppear == true)
@@ -779,6 +788,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				counthit1++;
 				Hit1 = true;
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 	}
@@ -797,6 +807,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				counthit2++;
 				Hit2 = true;
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 		else if (MrBrightAppear == true)
@@ -805,6 +816,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				counthit2++;
 				Hit2 = true;
+				App->audio->PlayFx(EnemyHit);
 			}
 		}
 	}
@@ -818,6 +830,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (Hit3 == false)
 		{
 			counthit3++;
+			App->audio->PlayFx(EnemyHit);
 		}
 	}
 
@@ -826,6 +839,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (Hit4 == false)
 		{
 			counthit4++;
+			App->audio->PlayFx(EnemyHit);
 		}
 	}
 
@@ -834,11 +848,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (Hit5 == false)
 		{
 			counthit5++;
+			App->audio->PlayFx(EnemyHit);
 		}
 	}
 
 	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
 	{
+		App->audio->PlayFx(TouchPala);
 		hitOnce = false;
 		Hit1 = false;
 		Hit2 = false;
@@ -848,6 +864,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
 	{
+		App->audio->PlayFx(TouchPala);
 		hitOnce = false;
 		Hit1 = false;
 		Hit2 = false;
@@ -857,6 +874,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
 	{
+		App->audio->PlayFx(TouchPala);
 		hitOnce = false;
 		Hit1 = false;
 		Hit2 = false;
@@ -864,6 +882,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		Hit4 = false;
 		Hit5 = false;
 	}
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == trianl.getLast()->data->body) App->audio->PlayFx(TouchPala);
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == trianr.getLast()->data->body) App->audio->PlayFx(TouchPala);
 }
 
 // Load assets

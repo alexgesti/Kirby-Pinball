@@ -140,5 +140,12 @@ public:
 	float SHitTemp;
 	float BHitTemp;
 
-	uint bonus_fx;
+	// Sounds
+	uint WinSound;
+	uint GameOverSound;
+	uint PalaSound;
+	uint KirbyDead;
+	uint KirbyAppear;
+	uint EnemyHit;
+	uint TouchPala;
 };

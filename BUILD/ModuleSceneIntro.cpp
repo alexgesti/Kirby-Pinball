@@ -6,7 +6,6 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
-#include "ModulePoints.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -90,9 +89,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	WinAnim13.speed = 0.17f;
 	WinAnim14.speed = 0.17f;
 
-	//cloudAnim.PushBack({80, 60, 4, 4});
-	//cloudhit.PushBack({84, 86, 88, 4});
-
+	cloudAnim.PushBack({4, 4, 80, 60});
+	cloudhit.PushBack({88, 4, 84, 86});
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -143,19 +141,32 @@ bool ModuleSceneIntro::Start()
 	MrBrightAppear = false;
 	YouWin = false;
 	debug = false;
+	createdonce = false;
+
+	Hit1 = false;
+	Hit2 = false;
+	Hit3 = false;
+	Hit4 = false;
+	Hit5 = false;
 
 	// Mr Shine parameters
 	mrshinecurrentAnim = &SmovingR;
+	cloudcurrentAnim1 = &cloudAnim;
+	cloudcurrentAnim2 = &cloudAnim;
+	gamecurrentAnim = &GameOverAnim;
+	wincurrentAnim = &WinAnim1;
 
 	hitboss = 0;
 	SHitTemp = 60;
 	BHitTemp = 60;
+	Chitt1 = 60;
+	Chitt2 = 60;
 	klives = 3;
-
-	//Win/Lose Anim Start
-
-	gamecurrentAnim = &GameOverAnim;
-	wincurrentAnim = &WinAnim1;
+	counthit1 = 0;
+	counthit2 = 0;
+	counthit3 = 0;
+	counthit4 = 0;
+	counthit5 = 0;
 
 	//Flapper left
 	int Flapperlc[16]
@@ -305,6 +316,17 @@ bool ModuleSceneIntro::Start()
 	kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
 	kirbys.getLast()->data->listener = this;
 
+	cloudstar1.add(App->physics->CreateStaticCircle(SCREEN_WIDTH / 2 + 150, 220, 25));
+	cloudstar1.getLast()->data->listener = this;
+	cloudstar2.add(App->physics->CreateStaticCircle(SCREEN_WIDTH / 2 - 150, 220, 25));
+	cloudstar2.getLast()->data->listener = this;
+	cloudstar3.add(App->physics->CreateStaticCircle(1000, 1000, 25));
+	cloudstar3.getLast()->data->listener = this;	
+	cloudstar4.add(App->physics->CreateStaticCircle(1000, 1000, 25));
+	cloudstar4.getLast()->data->listener = this;
+	cloudstar5.add(App->physics->CreateStaticCircle(1000, 1000, 25));
+	cloudstar5.getLast()->data->listener = this;
+
 	return ret;
 }
 
@@ -356,7 +378,7 @@ update_status ModuleSceneIntro::Update()
 		if (y > 1000) 
 		{
 			klives--;
-			if (klives > 0)
+			if (klives > 0 && YouWin == false)
 			{
 				kirbys.add(App->physics->CreateDynamicCircle(610, 60, 28));
 				kirbys.getLast()->data->listener = this;
@@ -365,10 +387,23 @@ update_status ModuleSceneIntro::Update()
 		}
 		c = c->next;
 	}
-
+	
 	// Scenary Boss Background
-	if (MrBrightAppear) App->renderer->Blit(mrbrightMap, 0, 0, NULL);
-	else App->renderer->Blit(mrshineMap, 0, 0, NULL);
+	if (MrBrightAppear)
+	{
+		App->renderer->Blit(mrbrightMap, 0, 0, NULL);
+
+		if (createdonce == false)
+		{
+			counthit1 = 0;
+			counthit2 = 0;
+			createdonce = true;
+		}
+	}
+	else
+	{
+		App->renderer->Blit(mrshineMap, 0, 0, NULL);
+	}
 
 	// All draw functions ------------------------------------------------------
 	c = mapt.getFirst();
@@ -454,6 +489,165 @@ update_status ModuleSceneIntro::Update()
 	if (klives >= 2) App->renderer->Blit(Life, 48, SCREEN_HEIGHT - 48, NULL);
 	if (klives >= 3) App->renderer->Blit(Life, 96, SCREEN_HEIGHT - 48, NULL);
 
+	// Flapper Left
+	c = flapperl.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
+		c = c->next;
+	}
+
+	// Flapper Right
+	c = flapperr.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
+		c = c->next;
+	}
+
+	// Kirby
+	c = kirbys.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(kirby, x - 5, y - 5, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	// Cloud/Star
+	c = cloudstar1.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect rect = cloudcurrentAnim1->GetCurrentFrame();
+
+		if (MrBrightAppear == false)
+		{
+			App->renderer->Blit(cloud, x - 13, y - 6, &rect);
+			if (counthit1 >= 2)
+			{
+				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+			}
+		}
+		else if (MrBrightAppear)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 + 150, 220)), 0);
+			App->renderer->Blit(star, x - 13, y - 20);
+			if (counthit1 >= 1)
+			{
+				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+			}
+		}
+
+		c = c->next;
+
+		Chitt1++;
+	}
+
+	c = cloudstar2.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect rect = cloudcurrentAnim2->GetCurrentFrame();
+
+		if (MrBrightAppear == false)
+		{
+			App->renderer->Blit(cloud, x - 13, y - 6, &rect);
+			if (counthit2 >= 2)
+			{
+				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+			}
+		}
+		else if (MrBrightAppear)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 - 150, 220)), 0);
+			App->renderer->Blit(star, x - 13, y - 20, &rect);
+			if (counthit2 >= 1)
+			{
+				c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+			}
+		}
+
+		c = c->next;
+
+		Chitt2++;
+	}
+
+	c = cloudstar3.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(star, x - 13, y - 20);
+		if (MrBrightAppear)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 + 100, 120)), 0);
+		}
+
+		if (counthit3 >= 1)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+		}
+
+		c = c->next;
+	}
+
+	c = cloudstar4.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(star, x - 13, y - 20);
+		if (MrBrightAppear)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2 - 100, 120)), 0);
+		}
+
+		if (counthit4 >= 1)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+		}
+
+		c = c->next;
+	}
+
+	c = cloudstar5.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(star, x - 13, y - 20);
+		if (MrBrightAppear)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(SCREEN_WIDTH / 2, 270)), 0);
+		}
+
+		if (counthit5 >= 1)
+		{
+			c->data->body->SetTransform(PIXEL_TO_METERS(b2Vec2(1000, 1000)), 0);
+		}
+
+		c = c->next;
+	}
+
 	// Win Dance
 	if (YouWin && YouLost == false)
 	{
@@ -494,10 +688,10 @@ update_status ModuleSceneIntro::Update()
 		else if (WinAnim11.FinishedAlready == true && WinAnim12.FinishedAlready == false) App->renderer->Blit(wintext12, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim12.FinishedAlready == true && WinAnim13.FinishedAlready == false) App->renderer->Blit(wintext13, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
 		else if (WinAnim13.FinishedAlready == true) App->renderer->Blit(wintext14, SCREEN_WIDTH / 2 - 161, SCREEN_HEIGHT / 2 - 110, &rect);
-		
+
 		if (WinAnim14.FinishedAlready) App->audio->PlayMusic("Assets/audio/DOSENTEXIST.ogg", 0);
 
-		wincurrentAnim->Update(); 
+		wincurrentAnim->Update();
 	}
 
 	// Game Over
@@ -518,42 +712,7 @@ update_status ModuleSceneIntro::Update()
 		gamecurrentAnim->Update();
 	}
 
-	// Flapper Left
-	c = flapperl.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperl, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
-		c = c->next;
-	}
-
-	// Flapper Right
-	c = flapperr.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipperr, x, y, NULL, 1.0f, c->data->GetRotation(), -1, -1);
-		c = c->next;
-	}
-
-	// Kirby
-	c = kirbys.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(kirby, x - 5, y - 5, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
 	mrshinecurrentAnim->Update();
-
-	//App->points->returnPoints();
 
 	return UPDATE_CONTINUE;
 }
@@ -579,19 +738,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			mrshinecurrentAnim = &BmovingR;
 		}
-
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body && hitboss < 10)
-		{
-			hitOnce = false;
-		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body && hitboss < 10)
-		{
-			hitOnce = false;
-		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body && hitboss < 10)
-		{
-			hitOnce = false;
-		}
 	}
 	else
 	{
@@ -610,19 +756,110 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			mrshinecurrentAnim = &SmovingR;	
 		}
+	}
 
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body && hitboss < 5)
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == cloudstar1.getLast()->data->body)
+	{
+		if (MrBrightAppear == false) 
 		{
-			hitOnce = false;
+			cloudcurrentAnim1 = &cloudhit;
+			Chitt1 = 0;
+			if (Hit1 == false)
+			{
+				counthit1++;
+				Hit1 = true;
+			}
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body && hitboss < 5)
+		else if (MrBrightAppear == true)
 		{
-			hitOnce = false;
+			if (Hit1 == false)
+			{
+				counthit1++;
+				Hit1 = true;
+			}
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body && hitboss < 5)
+	}
+	else if (Chitt1 >= 60)
+	{
+		cloudcurrentAnim1 = &cloudAnim;
+	}
+
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == cloudstar2.getLast()->data->body)
+	{
+		if (MrBrightAppear == false)
 		{
-			hitOnce = false;
+			cloudcurrentAnim2 = &cloudhit;
+			Chitt2 = 0;
+			if (Hit2 == false)
+			{
+				counthit2++;
+				Hit2 = true;
+			}
 		}
+		else if (MrBrightAppear == true)
+		{
+			if (Hit2 == false)
+			{
+				counthit2++;
+				Hit2 = true;
+			}
+		}
+	}
+	else if (Chitt2 >= 60)
+	{
+		cloudcurrentAnim2 = &cloudAnim;
+	}
+
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == cloudstar3.getLast()->data->body)
+	{
+		if (Hit3 == false)
+		{
+			counthit3++;
+		}
+	}
+
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == cloudstar4.getLast()->data->body)
+	{
+		if (Hit4 == false)
+		{
+			counthit4++;
+		}
+	}
+
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == cloudstar5.getLast()->data->body)
+	{
+		if (Hit5 == false)
+		{
+			counthit5++;
+		}
+	}
+
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
+	{
+		hitOnce = false;
+		Hit1 = false;
+		Hit2 = false;
+		Hit3 = false;
+		Hit4 = false;
+		Hit5 = false;
+	}
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
+	{
+		hitOnce = false;
+		Hit1 = false;
+		Hit2 = false;
+		Hit3 = false;
+		Hit4 = false;
+		Hit5 = false;
+	}
+	if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
+	{
+		hitOnce = false;
+		Hit1 = false;
+		Hit2 = false;
+		Hit3 = false;
+		Hit4 = false;
+		Hit5 = false;
 	}
 }
 

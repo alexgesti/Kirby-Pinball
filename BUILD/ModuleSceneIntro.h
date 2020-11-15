@@ -31,17 +31,36 @@ public:
 	p2List<PhysBody*> trianl;
 	p2List<PhysBody*> trianr;
 	p2List<PhysBody*> mrshines;
-
+	p2List<PhysBody*> cloudstar1;
+	p2List<PhysBody*> cloudstar2;
+	p2List<PhysBody*> cloudstar3;
+	p2List<PhysBody*> cloudstar4;
+	p2List<PhysBody*> cloudstar5;
+	
 	// Counter GameOver Sound
 	float MusicGOStop = 0;
 
 	// Bosses Live & End
+	bool Hit1;
+	bool Hit2;
+	bool Hit3;
+	bool Hit4;
+	bool Hit5;
+	int counthit1;
+	int counthit2;
+	int counthit3;
+	int counthit4;
+	int counthit5;
+	int Chitt1;
+	int Chitt2;
+	
 	bool MrBrightAppear;
 	bool hitOnce;
 	bool YouWin;
 	bool YouLost;
 	bool ChangeMusic;
 	bool debug;
+	bool createdonce;
 	int hitboss;
 	int klives;
 
@@ -81,6 +100,8 @@ public:
 	// A set of animations
 	Animation* mrshinecurrentAnim;
 	Animation* wincurrentAnim;
+	Animation* cloudcurrentAnim1;
+	Animation* cloudcurrentAnim2;
 	Animation* gamecurrentAnim;
 
 	Animation SmovingR;

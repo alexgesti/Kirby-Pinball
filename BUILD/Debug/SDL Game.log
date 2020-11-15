@@ -1,8 +1,18 @@
-﻿  ModuleSceneIntro.cpp
+﻿  ModulePhysics.cpp
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(127,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(128,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(152,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(153,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(196,20): warning C4018: '<': signed/unsigned mismatch
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(230,21): warning C4018: '<': signed/unsigned mismatch
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(265,21): warning C4018: '<': signed/unsigned mismatch
+D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModulePhysics.cpp(300,21): warning C4018: '<': signed/unsigned mismatch
+  ModuleSceneIntro.cpp
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(59,19): warning C4244: 'initializing': conversion from 'const float' to 'int', possible loss of data
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(61,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Animation.h(68,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(388,32): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(733,9): warning C4101: 'y': unreferenced local variable
 D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\ModuleSceneIntro.cpp(733,6): warning C4101: 'x': unreferenced local variable
+  Generating Code...
   SDL Game.vcxproj -> D:\cosas de clase\FisicaII\Kirby-Pinball\BUILD\Debug\2D Physics - class 4.exe

@@ -831,6 +831,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			counthit3++;
 			App->audio->PlayFx(EnemyHit);
+			Hit3 = true;
 		}
 	}
 
@@ -840,6 +841,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			counthit4++;
 			App->audio->PlayFx(EnemyHit);
+			Hit4 = true;
 		}
 	}
 
@@ -849,6 +851,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			counthit5++;
 			App->audio->PlayFx(EnemyHit);
+			Hit5 = true;
 		}
 	}
 
@@ -890,6 +893,35 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	App->textures->Unload(kirby);
+	App->textures->Unload(flipperl);
+	App->textures->Unload(flipperr);
+	App->textures->Unload(maptt);
+	App->textures->Unload(mrshine);
+	App->textures->Unload(mrbright);
+	App->textures->Unload(sparkhit);
+	App->textures->Unload(star1);
+	App->textures->Unload(star2);
+	App->textures->Unload(star3);
+	App->textures->Unload(cloud);
+	App->textures->Unload(mrbrightMap);
+	App->textures->Unload(mrshineMap);
+	App->textures->Unload(GameOver);
+	App->textures->Unload(wintext1);
+	App->textures->Unload(wintext2);
+	App->textures->Unload(wintext3);
+	App->textures->Unload(wintext4);
+	App->textures->Unload(wintext5);
+	App->textures->Unload(wintext6);
+	App->textures->Unload(wintext7);
+	App->textures->Unload(wintext8);
+	App->textures->Unload(wintext9);
+	App->textures->Unload(wintext10);
+	App->textures->Unload(wintext11);
+	App->textures->Unload(wintext12);
+	App->textures->Unload(wintext13);
+	App->textures->Unload(wintext14);
 
 	return true;
 }

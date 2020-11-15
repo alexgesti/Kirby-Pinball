@@ -22,12 +22,54 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	SHitR.loop = true;
 	SHitR.speed = 0.1f;
 
+	//Mr Bright
 	BmovingR.PushBack({ 2, 2, 76, 80 });
 	BmovingR.PushBack({ 78, 2, 76, 80 });
 	BmovingR.loop = true;
 	BmovingR.speed = 0.05f;
 
 	BHitR.PushBack({ 154, 2, 76, 80 });
+
+	//Spark Hit
+	SparksHit.PushBack({ 0, 0, 160, 160 });
+	SparksHit.PushBack({ 160, 0, 160, 160 });
+	SparksHit.PushBack({ 320, 0, 160, 160 });
+	SparksHit.PushBack({ 480, 0, 160, 160 });
+	SparksHit.PushBack({ 640, 0, 160, 160 });
+	SparksHit.PushBack({ 800, 0, 160, 160 });
+	SparksHit.loop = true;
+	SparksHit.speed = 0.2f;
+
+	//Kirby Win
+	WinAnim.PushBack({ 0, 0, 768, 729 }); // 1
+	WinAnim.PushBack({ 768, 0, 768, 729 }); // 2
+	WinAnim.PushBack({ 1536, 0, 768, 729 }); // 3
+	WinAnim.PushBack({ 2304, 0, 768, 729 }); // 4
+	WinAnim.PushBack({ 3072, 0, 768, 729 }); // 5
+	WinAnim.PushBack({ 3840, 0, 768, 729 }); // 6
+	WinAnim.PushBack({ 4608, 0, 768, 729 }); // 7
+	WinAnim.PushBack({ 5376, 0, 768, 729 }); // 8
+	WinAnim.PushBack({ 6144, 0, 768, 729 }); // 9
+	WinAnim.PushBack({ 6912, 0, 768, 729 }); // 10
+	WinAnim.PushBack({ 7680, 0, 768, 729 }); // 11
+	WinAnim.PushBack({ 8448, 0, 768, 729 }); // 12
+	WinAnim.PushBack({ 9216, 0, 768, 729 }); // 13
+	WinAnim.PushBack({ 9984, 0, 768, 729 }); // 14
+	WinAnim.PushBack({ 10752, 0, 768, 729 }); // 15
+	WinAnim.PushBack({ 11520, 0, 768, 729 }); // 16
+	WinAnim.PushBack({ 12288, 0, 768, 729 }); // 17
+	WinAnim.PushBack({ 13056, 0, 768, 729 }); // 18
+	WinAnim.PushBack({ 13824, 0, 768, 729 }); // 19
+	WinAnim.PushBack({ 14592, 0, 768, 729 }); // 20
+	WinAnim.PushBack({ 15360, 0, 768, 729 }); // 21
+	WinAnim.PushBack({ 16128, 0, 768, 729 }); // 22
+	WinAnim.PushBack({ 16896, 0, 768, 729 }); // 23
+	WinAnim.PushBack({ 17664, 0, 768, 729 }); // 24
+	WinAnim.PushBack({ 18432, 0, 768, 729 }); // 25
+	WinAnim.PushBack({ 19200, 0, 768, 729 }); // 26
+	WinAnim.PushBack({ 19968, 0, 768, 729 }); // 27
+	WinAnim.loop = false;
+	WinAnim.speed = 0.1f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -47,6 +89,8 @@ bool ModuleSceneIntro::Start()
 	flipperr = App->textures->Load("Assets/sprites/Flippersr.png");
 	mrshine = App->textures->Load("Assets/sprites/MrShine.png");
 	mrbright = App->textures->Load("Assets/sprites/MrBright.png");
+	sparkhit = App->textures->Load("Assets/sprites/Star_KO.png");
+	wintext = App->textures->Load("Assets/sprites/Win_Dance.png");
 	mrbrightMap = App->textures->Load("Assets/sprites/MrBright_Fondo.png");
 	mrshineMap = App->textures->Load("Assets/sprites/MrShine_Fondo.png");
 
@@ -55,6 +99,7 @@ bool ModuleSceneIntro::Start()
 	App->audio->PlayMusic("Assets/audio/Bubly.ogg", 0);
 
 	MrBrightAppear = false;
+	YouWin = false;
 
 	// Mr Shine parameters
 	mrshinecurrentAnim = &SmovingR;
@@ -62,6 +107,9 @@ bool ModuleSceneIntro::Start()
 	hitboss = 0;
 	SHitTemp = 60;
 	BHitTemp = 60;
+
+	// Win parameters
+	wincurrentAnim = &WinAnim;
 
 	//Flapper left
 	int Flapperlc[16]
@@ -194,7 +242,7 @@ bool ModuleSceneIntro::Start()
 		191, 474,
 	};
 
-	trianl.add(App->physics->CreateStaticChain(0, 0, Trianlc, 6));
+	trianl.add(App->physics->CreateStaticChain(0, 0, Trianlc, 6, 1));
 
 	int Trianrc[6]
 	{
@@ -203,7 +251,7 @@ bool ModuleSceneIntro::Start()
 		576, 474,
 	};
 
-	trianr.add(App->physics->CreateStaticChain(0, 0, Trianrc, 6));
+	trianr.add(App->physics->CreateStaticChain(0, 0, Trianrc, 6, 1));
 
 	mrshines.add(App->physics->CreateStaticCircle(135, 140, 30));
 	mrshines.getLast()->data->listener = this;
@@ -246,11 +294,11 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	// Mr Shine
+	// Mr Shine & Mr Bright
 
 	c = mrshines.getFirst();
 
-	if (hitboss >= 5 && SHitTemp >= 60)
+	if (hitboss >= 5 && SHitTemp >= 60 && hitboss < 10)
 	{
 		MrBrightAppear = true;
 
@@ -264,13 +312,32 @@ update_status ModuleSceneIntro::Update()
 			SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
 
 			c->data->GetPosition(x, y);
-			App->renderer->Blit(mrbright, x, y, &rect);
+			App->renderer->Blit(mrbright, x - 10, y - 14, &rect);
 			c = c->next;
 		}
 
 		BHitTemp++;
 	}
-	else {
+	else if (hitboss >= 5 && SHitTemp < 60
+		|| hitboss >= 10 && BHitTemp < 60)
+	{
+		mrshinecurrentAnim = &SparksHit;
+
+		while (c != NULL)
+		{
+			int x, y;
+			SDL_Rect rect = mrshinecurrentAnim->GetCurrentFrame();
+
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(sparkhit, x - 40, y - 40, &rect);
+			c = c->next;
+		}
+
+		if (hitboss >= 5 && SHitTemp < 60) SHitTemp++;
+		else if (hitboss >= 10 && BHitTemp < 60) BHitTemp++;
+	}
+	else if (hitboss < 5)
+	{
 		while (c != NULL)
 		{
 			int x, y;
@@ -282,6 +349,28 @@ update_status ModuleSceneIntro::Update()
 		}
 
 		SHitTemp++;
+	}
+	else
+	{
+		while (c != NULL)
+		{
+			int x, y;
+
+			c->data->GetPosition(x, y);
+			c->data->body->SetTransform(b2Vec2_zero, 0);
+			c = c->next;
+		}
+
+		YouWin = true;
+	}
+
+	// Win Dance
+
+	if (YouWin)
+	{
+		SDL_Rect rect = wincurrentAnim->GetCurrentFrame();
+		App->renderer->Blit(wintext, 0, 0, &rect);
+		wincurrentAnim->Update();
 	}
 
 	// Kirby
@@ -321,6 +410,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	mrshinecurrentAnim->Update();
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -339,22 +429,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				hitboss++;
 				hitOnce = true;
+				LOG("%d", hitboss)
 			}
 		}
-		else if (BHitTemp >= 60)
+		else if (BHitTemp >= 60 && hitboss < 10)
 		{
 			mrshinecurrentAnim = &BmovingR;
 		}
 
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body && hitboss < 10)
 		{
 			hitOnce = false;
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body && hitboss < 10)
 		{
 			hitOnce = false;
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body && hitboss < 10)
 		{
 			hitOnce = false;
 		}
@@ -372,31 +463,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				LOG("%d", hitboss)
 			}
 		}
-		else if (SHitTemp >= 60)
+		else if (SHitTemp >= 60 && hitboss < 5)
 		{
 			mrshinecurrentAnim = &SmovingR;	
 		}
 
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == mapt.getLast()->data->body && hitboss < 5)
 		{
 			hitOnce = false;
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperl.getLast()->data->body && hitboss < 5)
 		{
 			hitOnce = false;
 		}
-		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body)
+		if (bodyA->body == kirbys.getLast()->data->body && bodyB->body == flapperr.getLast()->data->body && hitboss < 5)
 		{
 			hitOnce = false;
 		}
 	}
-
-	/*
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
 
 // Load assets

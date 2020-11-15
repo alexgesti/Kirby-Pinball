@@ -47,7 +47,7 @@ public:
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateDynamicChain(int x, int y, int* points, int size);
-	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size, float restitution = 0);
 	PhysBody* CreateDynamicPolygon(int x, int y, int* points, int size);
 	PhysBody* CreateStaticPolygon(int x, int y, int* points, int size);
 

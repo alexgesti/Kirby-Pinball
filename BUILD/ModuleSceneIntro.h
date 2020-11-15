@@ -32,9 +32,11 @@ public:
 	p2List<PhysBody*> trianr;
 	p2List<PhysBody*> mrshines;
 
+	// Bosses Live & End
 	bool MrBrightAppear;
 	bool hitOnce;
 	int hitboss;
+	bool YouWin;
 
 	b2RevoluteJoint* Jleft;
 	b2RevoluteJoint* Jright;
@@ -45,17 +47,24 @@ public:
 	SDL_Texture* maptt;
 	SDL_Texture* mrshine;
 	SDL_Texture* mrbright;
+	SDL_Texture* sparkhit;
+	SDL_Texture* wintext;
 	SDL_Texture* mrbrightMap;
 	SDL_Texture* mrshineMap;
 
 	// A set of animations
 	Animation* mrshinecurrentAnim;
+	Animation* wincurrentAnim;
 
 	Animation SmovingR;
 	Animation SHitR;
 
 	Animation BmovingR;
 	Animation BHitR;
+
+	Animation SparksHit;
+
+	Animation WinAnim;
 
 	// MrShine parameters
 	float SHitTemp;

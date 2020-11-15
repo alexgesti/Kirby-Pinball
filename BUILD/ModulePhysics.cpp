@@ -235,7 +235,7 @@ PhysBody* ModulePhysics::CreateDynamicChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size, float restitution)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -255,6 +255,7 @@ PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 	shape.CreateLoop(p, size / 2);
 
 	b2FixtureDef fixture;
+	fixture.restitution = restitution;
 	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
